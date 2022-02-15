@@ -1,5 +1,5 @@
 // Aseprite
-// Copyright (C) 2018-2020  Igara Studio S.A.
+// Copyright (C) 2018-2022  Igara Studio S.A.
 // Copyright (C) 2001-2018  David Capello
 //
 // This program is distributed under the terms of
@@ -971,8 +971,12 @@ int PaletteView::findExactIndex(const app::Color& color) const
 {
   switch (color.getType()) {
 
-    case Color::MaskType:
-      return (current_editor ? current_editor->sprite()->transparentColor(): -1);
+    case Color::MaskType: {
+      if (color.getType() == Color::IndexType)
+        return (current_editor ? current_editor->sprite()->transparentColor(): -1);
+      else
+        return currentPalette()->findMaskColor();
+    }
 
     case Color::RgbType:
     case Color::HsvType:
